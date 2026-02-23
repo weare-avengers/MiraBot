@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Digi AI - OpenRouter Test</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .container {
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                padding: 40px;
+                max-width: 600px;
+                width: 100%;
+            }
+
+            h1 {
+                text-align: center;
+                color: #667eea;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                text-align: center;
+                color: #666;
+                margin-bottom: 30px;
+            }
+
+            .status {
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .status.checking {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .status.success {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .status.error {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .test-area {
+                margin-top: 20px;
+            }
+
+            input,
+            button {
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            button {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            button:hover {
+                transform: scale(1.02);
+            }
+
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            .response {
+                background: #f5f5f5;
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 10px;
+                min-height: 100px;
+                display: none;
+            }
+
+            .response.active {
+                display: block;
+            }
+
+            .info-box {
+                background: #e3f2fd;
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+
+            .info-box h3 {
+                color: #1976d2;
+                margin-bottom: 10px;
+            }
+
+            .info-box p {
+                color: #555;
+                line-height: 1.6;
+            }
+
+            code {
+                background: #f5f5f5;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: monospace;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🤖 Digi AI Assistant</h1>
+            <p class="subtitle">OpenRouter Integration Test</p>
+
+            <div class="status checking" id="status">
+                🔄 Checking server status...
+            </div>
+
+            <div class="test-area">
+                <h3>Test Chat dengan Model Gratis</h3>
+                <input
+                    type="text"
+                    id="testMessage"
+                    placeholder="Ketik pertanyaan Anda..."
+                    value="Halo, perkenalkan diri kamu!"
+                />
+                <button onclick="testChat()" id="testButton">
+                    🚀 Test Chat
+                </button>
+
+                <div class="response" id="response">
+                    <strong>Response:</strong>
+                    <p id="responseText"></p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>ℹ️ Informasi</h3>
+                <p>
+                    Bot ini menggunakan <strong>OpenRouter</strong> dengan
+                    model:
+                    <code>arcee-ai/trinity-large-preview:free</code>
+                </p>
+                <p style="margin-top: 10px">
+                    <strong>100% GRATIS!</strong> Tidak ada biaya untuk
+                    menggunakan model ini.
+                </p>
+                <p style="margin-top: 10px; font-size: 12px; color: #888">
+                    Pastikan server berjalan di
+                    <code>http://localhost:7000</code>
+                </p>
+            </div>
+        </div>
+
+        <script>
+            const API_URL = "http://localhost:7000/api/chat";
+            const HEALTH_URL = "http://localhost:7000/health";
+
+            // Check server health on load
+            async function checkHealth() {
+                try {
+                    const response = await fetch(HEALTH_URL);
+                    if (response.ok) {
+                        const status = document.getElementById("status");
+                        status.className = "status success";
+                        status.textContent =
+                            "✅ Server online dan siap digunakan!";
+                    } else {
+                        throw new Error("Server not responding");
+                    }
+                } catch (error) {
+                    const status = document.getElementById("status");
+                    status.className = "status error";
+                    status.textContent =
+                        "❌ Server offline. Jalankan: npm run dev";
+                }
+            }
+
+            async function testChat() {
+                const input = document.getElementById("testMessage");
+                const message = input.value.trim();
+                const button = document.getElementById("testButton");
+                const responseDiv = document.getElementById("response");
+                const responseText = document.getElementById("responseText");
+
+                if (!message) return;
+
+                button.disabled = true;
+                button.textContent = "⏳ Mengirim...";
+                responseDiv.classList.remove("active");
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            sessionId: "test-" + Date.now(),
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Request failed");
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        responseText.textContent = data.response;
+                        responseDiv.classList.add("active");
+
+                        const status = document.getElementById("status");
+                        status.className = "status success";
+                        status.textContent =
+                            "✅ OpenRouter model bekerja dengan sempurna!";
+                    } else {
+                        throw new Error(data.error || "Unknown error");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    const status = document.getElementById("status");
+                    status.className = "status error";
+                    status.textContent = "❌ Error: " + error.message;
+
+                    responseText.textContent =
+                        "Terjadi kesalahan. Pastikan:\n1. Server berjalan (npm run dev)\n2. API keys sudah diset di .env\n3. Pinecone API key valid";
+                    responseDiv.classList.add("active");
+                } finally {
+                    button.disabled = false;
+                    button.textContent = "🚀 Test Chat";
+                }
+            }
+
+            // Handle Enter key
+            document
+                .getElementById("testMessage")
+                .addEventListener("keypress", (e) => {
+                    if (e.key === "Enter") {
+                        testChat();
+                    }
+                });
+
+            // Check health on load
+            window.onload = checkHealth;
+        </script>
+    </body>
+</html>

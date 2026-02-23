@@ -1,0 +1,103 @@
+PT Mitra Graha Integrasi (MIGRASI) Profile
+Company Profile
+PT Mitra Graha Integrasi (MIGRASI)
+Established: 2022
+Mission: Providing integrated IT and AV solutions for businesses to enhance operational efficiency, security, and competitiveness in the digital transformation era.
+Core Principle: Customer satisfaction in resolving IT-related issues with a focus on providing 'Business Solutions for Your Services.'
+Vision
+Goal: To become Indonesia's leading IT systems integrator and Pro-AV company by 2028.
+Mission
+Perform operations following Islamic principles.
+Build a competent, professional, and ethical HR team.
+Create efficient and effective operational systems.
+Ensure customer satisfaction through ongoing premium services.
+Develop sustainable financial growth and an accountable financial system.
+Services Offered
+Website Development
+Application Development
+Big Data & AI Solutions
+IT Hardware & Software Procurement
+Network Installation
+Cybersecurity
+Cloud Computing
+IT Training
+Audio-Visual System Integration
+Unified Communication Solutions (Video Conference)
+Detailed IT Services
+1. Website Development
+Services:
+- Company Profile Websites
+- E-Commerce Platforms
+- Intranet Portals
+- Campaign Landing Pages
+- Custom Web-Based Systems
+2. Application Development
+Platforms:
+- Mobile Apps (Android & iOS)
+- Desktop Applications
+- Enterprise Systems (ERP, HRIS, CRM, etc.)
+3. Big Data & AI
+Solutions:
+- Business Intelligence Dashboards
+- Data Warehousing & Engineering
+- Machine Learning & Predictive Analytics
+- AI Automation & Chatbots
+4. IT Hardware & Software Procurement
+Products:
+- Laptops, PCs, Servers, Network Devices
+- Licensed Software
+- IT Planning & Budgeting Consultancy
+5. Network Installation
+Services:
+- LAN, WAN, and Fiber Optic Installation
+- Enterprise Wi-Fi Setup
+- Network Security Configurations
+6. Cybersecurity
+Security Services:
+- Security Assessment & Penetration Testing
+- Vulnerability Assessment
+- Security Hardening & ISO 27001 Compliance
+7. Cloud Computing
+Solutions:
+- Cloud Migration & Infrastructure Setup
+- Backup & Disaster Recovery
+- IaaS & SaaS Solutions
+8. IT Training
+Programs:
+- Internal System Training
+- Cybersecurity Awareness
+- Data Analytics & Business Intelligence
+9. Maintenance & Support
+Services:
+- Preventive & Corrective Maintenance
+- Remote & On-Site Support
+- IT Helpdesk
+- Server & System Monitoring
+Audio-Visual (AV) Services
+1. Pro Audio-Visual System Integration
+Systems:
+- Meeting Room Systems
+- Audio Conferencing Systems
+- Professional Sound & Lighting Systems
+2. Unified Communication Solutions
+Services:
+- Video Conference Installations
+- Collaboration Platform Integration
+- Digital Signage Systems
+Company Structure
+CEO: Azka Basil Danish Rahmat
+Core Company Values
+- Meaning Solution: Deliver relevant and valuable technology solutions.
+- Integrity & Amanah: Operate with honesty and trust, guided by Islamic principles.
+- Exceeding Expectations: Going above and beyond client expectations.
+- Responsibility & Accountability: Take responsibility for all outcomes.
+- Adaptive & Agile: Quick and innovative responses to change.
+- Service Excellence: Providing top-quality services.
+- Impactful Value Creation: Delivering sustainable and ethical value.
+Technology Partners
+IT Infrastructure: Cisco, IBM, HP, Dell, Lenovo, Fortinet, etc.
+Audio-Visual: Sony, Panasonic, Epson, LG Electronics, etc.
+Cloud & Data Solutions: Microsoft Azure, Oracle, AWS, etc.
+Clients
+Government: Kementerian Keuangan, Bakosurtanal, Kementerian Lingkungan Hidup, etc.
+Private: BCA, Tanoto Foundation, Pelindo, etc.

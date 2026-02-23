@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Digi AI Assistant - Chat</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .chat-container {
+                width: 90%;
+                max-width: 600px;
+                height: 80vh;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .chat-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 20px;
+                text-align: center;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .chat-messages {
+                flex: 1;
+                overflow-y: auto;
+                padding: 20px;
+                background: #f5f5f5;
+            }
+
+            .message {
+                margin-bottom: 15px;
+                display: flex;
+                animation: slideIn 0.3s ease;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .message.user {
+                justify-content: flex-end;
+            }
+
+            .message-content {
+                max-width: 70%;
+                padding: 12px 16px;
+                border-radius: 18px;
+                word-wrap: break-word;
+            }
+
+            .message.user .message-content {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-bottom-right-radius: 4px;
+            }
+
+            .message.assistant .message-content {
+                background: white;
+                color: #333;
+                border-bottom-left-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .chat-input-container {
+                padding: 20px;
+                background: white;
+                border-top: 1px solid #e0e0e0;
+                display: flex;
+                gap: 10px;
+            }
+
+            .chat-input {
+                flex: 1;
+                padding: 12px 16px;
+                border: 2px solid #e0e0e0;
+                border-radius: 25px;
+                font-size: 14px;
+                outline: none;
+                transition: border-color 0.3s;
+            }
+
+            .chat-input:focus {
+                border-color: #667eea;
+            }
+
+            .send-button {
+                padding: 12px 24px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: transform 0.2s;
+            }
+
+            .send-button:hover {
+                transform: scale(1.05);
+            }
+
+            .send-button:active {
+                transform: scale(0.95);
+            }
+
+            .send-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            .typing-indicator {
+                display: none;
+                padding: 12px 16px;
+                background: white;
+                border-radius: 18px;
+                width: 60px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .typing-indicator.active {
+                display: block;
+            }
+
+            .typing-indicator span {
+                height: 8px;
+                width: 8px;
+                background: #667eea;
+                border-radius: 50%;
+                display: inline-block;
+                margin-right: 4px;
+                animation: typing 1.4s infinite;
+            }
+
+            .typing-indicator span:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            .typing-indicator span:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+
+            @keyframes typing {
+                0%,
+                60%,
+                100% {
+                    transform: translateY(0);
+                }
+                30% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            .error-message {
+                background: #ff6b6b;
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 20px;
+                display: none;
+            }
+
+            .error-message.active {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="chat-container">
+            <div class="chat-header">⚡ Digi AI Assistant</div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-content">
+                        Halo! Saya Digi, asisten customer support Migrasi. Ada
+                        yang bisa saya bantu? 😊
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input
+                    type="text"
+                    class="chat-input"
+                    id="messageInput"
+                    placeholder="Ketik pesan Anda..."
+                    onkeypress="handleKeyPress(event)"
+                />
+                <button
+                    class="send-button"
+                    onclick="sendMessage()"
+                    id="sendButton"
+                >
+                    Kirim
+                </button>
+            </div>
+        </div>
+
+        <script>
+            const API_URL = "http://localhost:7000/api/chat";
+            const sessionId = "web-" + Date.now();
+            let isProcessing = false;
+
+            function handleKeyPress(event) {
+                if (event.key === "Enter" && !isProcessing) {
+                    sendMessage();
+                }
+            }
+
+            async function sendMessage() {
+                const input = document.getElementById("messageInput");
+                const message = input.value.trim();
+
+                if (!message || isProcessing) return;
+
+                isProcessing = true;
+                document.getElementById("sendButton").disabled = true;
+                hideError();
+
+                // Add user message to chat
+                addMessage(message, "user");
+                input.value = "";
+
+                // Show typing indicator
+                const typingIndicator = addTypingIndicator();
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            sessionId: sessionId,
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+
+                    const data = await response.json();
+
+                    // Remove typing indicator
+                    typingIndicator.remove();
+
+                    if (data.success) {
+                        addMessage(data.response, "assistant");
+                    } else {
+                        showError(
+                            "Maaf, terjadi kesalahan. Silakan coba lagi.",
+                        );
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    typingIndicator.remove();
+                    showError(
+                        "Tidak dapat terhubung ke server. Pastikan server berjalan di http://localhost:7000",
+                    );
+                } finally {
+                    isProcessing = false;
+                    document.getElementById("sendButton").disabled = false;
+                    input.focus();
+                }
+            }
+
+            function addMessage(text, sender) {
+                const messagesContainer =
+                    document.getElementById("chatMessages");
+                const messageDiv = document.createElement("div");
+                messageDiv.className = `message ${sender}`;
+
+                const contentDiv = document.createElement("div");
+                contentDiv.className = "message-content";
+                contentDiv.textContent = text;
+
+                messageDiv.appendChild(contentDiv);
+                messagesContainer.appendChild(messageDiv);
+
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            function addTypingIndicator() {
+                const messagesContainer =
+                    document.getElementById("chatMessages");
+                const messageDiv = document.createElement("div");
+                messageDiv.className = "message assistant";
+
+                const typingDiv = document.createElement("div");
+                typingDiv.className = "typing-indicator active";
+                typingDiv.innerHTML = "<span></span><span></span><span></span>";
+
+                messageDiv.appendChild(typingDiv);
+                messagesContainer.appendChild(messageDiv);
+
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                return messageDiv;
+            }
+
+            function showError(message) {
+                const errorDiv = document.getElementById("errorMessage");
+                errorDiv.textContent = message;
+                errorDiv.classList.add("active");
+
+                setTimeout(() => {
+                    hideError();
+                }, 5000);
+            }
+
+            function hideError() {
+                const errorDiv = document.getElementById("errorMessage");
+                errorDiv.classList.remove("active");
+            }
+
+            // Focus input on load
+            window.onload = () => {
+                document.getElementById("messageInput").focus();
+            };
+        </script>
+    </body>
+</html>
