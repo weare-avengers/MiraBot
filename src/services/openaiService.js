@@ -13,8 +13,28 @@ class TimeoutError extends Error {
 
 class OpenAIService {
     constructor() {
-        // Use OpenRouter if enabled, otherwise use OpenAI
-        if (config.openrouter.enabled) {
+        // Priority: OpenAI > OpenRouter fallback
+        // Try OpenAI first
+        if (config.openai.apiKey && config.openai.apiKey.trim() !== '') {
+            this.client = new OpenAI({
+                apiKey: config.openai.apiKey,
+            });
+            this.model = config.openai.model;
+            this.provider = "OpenAI";
+            console.log(`✅ Using OpenAI with model: ${this.model}`);
+            
+            // Setup fallback client untuk quota error recovery
+            this.fallbackClient = new OpenAI({
+                apiKey: config.openrouter.apiKey,
+                baseURL: config.openrouter.baseURL,
+                defaultHeaders: {
+                    "HTTP-Referer": "http://localhost:7000",
+                    "X-Title": "Digi Assistant",
+                },
+            });
+            this.fallbackModel = config.openrouter.model;
+        } else {
+            // Fallback ke OpenRouter
             this.client = new OpenAI({
                 apiKey: config.openrouter.apiKey,
                 baseURL: config.openrouter.baseURL,
@@ -25,14 +45,7 @@ class OpenAIService {
             });
             this.model = config.openrouter.model;
             this.provider = "OpenRouter";
-            console.log(`🤖 Using OpenRouter with model: ${this.model}`);
-        } else {
-            this.client = new OpenAI({
-                apiKey: config.openai.apiKey,
-            });
-            this.model = config.openai.model;
-            this.provider = "OpenAI";
-            console.log(`🤖 Using OpenAI with model: ${this.model}`);
+            console.log(`⚠️  OpenAI API key not found, using OpenRouter with model: ${this.model}`);
         }
 
         this.systemPrompt = `You are Digi, a friendly, calm, and helpful customer support agent for a company called Migrasi.
@@ -133,11 +146,21 @@ Current date and time: ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Ja
             
             // Priority 2: Use OpenAI if available
             if (!config.openrouter.enabled && config.openai.apiKey) {
-                const response = await this.client.embeddings.create({
-                    model: config.openai.embeddingModel,
-                    input: text,
-                });
-                return response.data[0].embedding;
+                try {
+                    const response = await this.client.embeddings.create({
+                        model: config.openai.embeddingModel,
+                        input: text,
+                    });
+                    return response.data[0].embedding;
+                } catch (openaiError) {
+                    // Jika OpenAI error (429 quota), fallback ke simple embedding
+                    if (openaiError.status === 429 || openaiError.code === 'insufficient_quota') {
+                        console.error("❌ OpenAI Embedding Error (429 Quota):", openaiError.message);
+                        console.log("⚠️  Falling back to simple embedding for now...");
+                        return this.createSimpleEmbedding(text);
+                    }
+                    throw openaiError;
+                }
             }
             
             // Fallback: Simple embedding (not recommended for production)
@@ -148,7 +171,8 @@ Current date and time: ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Ja
             return this.createSimpleEmbedding(text);
         } catch (error) {
             console.error("❌ Error creating embedding:", error);
-            throw error;
+            // Return simple embedding as last resort
+            return this.createSimpleEmbedding(text);
         }
     }
 
@@ -184,7 +208,7 @@ Current date and time: ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Ja
     // Simple hash-based embedding for free usage (not recommended for production)
     createSimpleEmbedding(text) {
         // Create a deterministic vector from text
-        const dimension = 1536; // Standard OpenAI embedding size
+        const dimension = 1024; // Match Pinecone index dimension
         const vector = new Array(dimension).fill(0);
 
         // Use text characteristics to create pseudo-embedding
@@ -355,6 +379,45 @@ Current date and time: ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Ja
                     console.error("⏱️ Request timeout after 10 seconds");
                     throw new TimeoutError("Request timeout");
                 }
+                
+                // Check if error is quota/billing error (429) and we have fallback
+                if (
+                    (error.status === 429 || error.code === 'insufficient_quota') &&
+                    this.provider === "OpenAI" &&
+                    this.fallbackClient
+                ) {
+                    console.error("❌ OpenAI Error (429 Quota Exceeded):", error.message);
+                    console.log("⚠️  Switching to OpenRouter fallback...");
+                    
+                    // Retry dengan OpenRouter
+                    try {
+                        const response = await this.fallbackClient.chat.completions.create(
+                            {
+                                model: this.fallbackModel,
+                                messages: messages,
+                                temperature: 0.7,
+                                max_tokens: 350,
+                            }
+                        );
+                        
+                        console.log("✅ OpenRouter fallback successful!");
+                        const aiResponse = response.choices[0]?.message?.content;
+                        if (!aiResponse) {
+                            console.error("❌ OpenRouter response is empty:", response.choices[0]);
+                            throw new Error("OpenRouter returned empty response");
+                        }
+                        console.log("\n✅ [DEBUG] AI Response received (via OpenRouter fallback)");
+                        console.log("📝 Response length:", aiResponse.length, "characters");
+                        console.log("💡 Response preview:", aiResponse.substring(0, 200) + (aiResponse.length > 200 ? "..." : ""));
+                        console.log("═".repeat(80) + "\n");
+                        
+                        return aiResponse;
+                    } catch (fallbackError) {
+                        console.error("❌ OpenRouter fallback also failed:", fallbackError);
+                        throw fallbackError;
+                    }
+                }
+                
                 throw error;
             }
         } catch (error) {
