@@ -29,7 +29,7 @@ class OpenAIService {
                 baseURL: config.openrouter.baseURL,
                 defaultHeaders: {
                     "HTTP-Referer": "http://localhost:7000",
-                    "X-Title": "Digi Assistant",
+                    "X-Title": "Mira Assistant",
                 },
             });
             this.fallbackModel = config.openrouter.model;
@@ -40,7 +40,7 @@ class OpenAIService {
                 baseURL: config.openrouter.baseURL,
                 defaultHeaders: {
                     "HTTP-Referer": "http://localhost:7000",
-                    "X-Title": "Digi Assistant",
+                    "X-Title": "Mira Assistant",
                 },
             });
             this.model = config.openrouter.model;
@@ -48,7 +48,7 @@ class OpenAIService {
             console.log(`⚠️  OpenAI API key not found, using OpenRouter with model: ${this.model}`);
         }
 
-        this.systemPrompt = `You are Digi, a friendly, calm, and helpful customer support agent for a company called Migrasi.
+        this.systemPrompt = `You are Mira, a friendly, calm, and helpful customer support agent for a company called Migrasi.
 Your primary role is to assist customers with questions related to Migrasi and its services in a polite, professional, and supportive manner.
 
 Key Instructions
