@@ -87,7 +87,7 @@ const ChatInterface = () => {
         bubbles: [
           {
             type: 'intro',
-            content: 'Halo! Selamat datang di **Digi Assistant**. 👋'
+            content: 'Halo! Selamat datang di **Mira Assistant**. 👋'
           },
           {
             type: 'main',
