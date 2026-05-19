@@ -1,0 +1,12 @@
+{
+  "watch": [
+    "src/"
+  ],
+  "ignore": [
+    "knowledge/*",
+    "knowledge/**/*",
+    "node_modules/*",
+    ".git/*"
+  ],
+  "ext": "js"
+}
