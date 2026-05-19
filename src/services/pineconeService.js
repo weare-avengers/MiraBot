@@ -46,6 +46,26 @@ class PineconeService {
     }
   }
 
+  async deleteByFilter(filter) {
+    try {
+      await this.index.namespace(config.pinecone.namespace).deleteMany({ filter });
+      console.log(`✅ Deleted previous vectors matching filter:`, filter);
+    } catch (error) {
+      console.error('❌ Error deleting vectors by filter:', error);
+      throw error;
+    }
+  }
+
+  async deleteMany(ids) {
+    try {
+      await this.index.namespace(config.pinecone.namespace).deleteMany(ids);
+      console.log(`✅ Deleted up to ${ids.length} potential vectors by ID list`);
+    } catch (error) {
+      console.error('❌ Error deleting vectors by IDs:', error);
+      throw error;
+    }
+  }
+
   async deleteAll() {
     try {
       await this.index.namespace(config.pinecone.namespace).deleteAll();

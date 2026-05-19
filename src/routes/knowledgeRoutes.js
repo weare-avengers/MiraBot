@@ -97,4 +97,47 @@ router.post('/upload/bulk', upload.array('files', 10), async (req, res) => {
   }
 });
 
+// Webhook endpoint to trigger database-to-Pinecone auto-sync from CMS changes
+router.post('/sync-webhook', async (req, res) => {
+  try {
+    const { secret, force } = req.body;
+    
+    // Validate secret token
+    const config = require('../config/config');
+    const expectedSecret = config.cmsApi.webhookSyncSecret || 'Migrasi#0987';
+    
+    if (secret !== expectedSecret) {
+      console.warn('⚠️  Webhook synchronization attempt blocked: Invalid secret token.');
+      return res.status(403).json({ 
+        success: false, 
+        error: 'Forbidden: Invalid secret token' 
+      });
+    }
+
+    console.log('⚡ Webhook triggered! Initiating API CMS Knowledge Base synchronization in the background...');
+
+    // Trigger sync asynchronously in background to prevent HTTP timeout in NestJS CMS
+    const apiSyncService = require('../services/apiSyncService');
+    apiSyncService.syncAll(force === true)
+      .then(result => {
+        console.log('✅ Webhook triggered background sync completed successfully.');
+      })
+      .catch(error => {
+        console.error('❌ Webhook triggered background sync failed:', error);
+      });
+
+    // Return instant success response
+    res.json({
+      success: true,
+      message: 'Synchronization process triggered successfully in background'
+    });
+  } catch (error) {
+    console.error('❌ Error handling sync webhook:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to initiate synchronization' 
+    });
+  }
+});
+
 module.exports = router;

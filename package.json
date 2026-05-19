@@ -9,7 +9,11 @@
     "dev:watch": "cross-env AUTO_WATCH=true nodemon src/server.js",
     "sync-knowledge": "node src/scripts/syncKnowledge.js",
     "watch-knowledge": "node src/scripts/watchKnowledge.js",
-    "clear-knowledge": "node src/scripts/clearKnowledge.js"
+    "clear-knowledge": "node src/scripts/clearKnowledge.js",
+    "scrape-website": "node src/scripts/scrapeWebsite.js",
+    "scrape-website:force": "node src/scripts/scrapeWebsite.js --force",
+    "sync-api": "node src/scripts/syncApi.js",
+    "sync-api:force": "node src/scripts/syncApi.js --force"
   },
   "keywords": [
     "chatbot",
@@ -24,6 +28,7 @@
     "@pinecone-database/pinecone": "^2.0.1",
     "axios": "^1.6.5",
     "body-parser": "^1.20.2",
+    "cheerio": "^1.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -32,8 +37,11 @@
     "langchain": "^0.1.19",
     "mammoth": "^1.6.0",
     "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.22.3",
+    "node-cron": "^4.2.1",
     "openai": "^4.28.0",
     "pdf-parse": "^1.1.1",
+    "puppeteer": "^19.11.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloaded Documents - Digi Assistant</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 30px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      color: #6c757d;
+      font-size: 0.95em;
+    }
+
+    .controls {
+      padding: 20px 30px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e9ecef;
+      background: #f8f9fa;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+    }
+
+    .btn-info {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-info:hover {
+      background: #138496;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(23, 162, 184, 0.3);
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .content h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 1.8em;
+    }
+
+    .documents-grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .document-card {
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 20px;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .document-card:hover {
+      border-color: #667eea;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15);
+      background: white;
+    }
+
+    .doc-info {
+      flex: 1;
+    }
+
+    .doc-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .doc-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 0.9em;
+      color: #6c757d;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .doc-url {
+      font-size: 0.85em;
+      color: #667eea;
+      margin-top: 8px;
+      word-break: break-all;
+    }
+
+    .doc-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .doc-actions button {
+      padding: 8px 12px;
+      font-size: 0.85em;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #667eea;
+      color: white;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 500;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+
+    .empty-icon {
+      font-size: 4em;
+      margin-bottom: 20px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #667eea;
+      font-size: 1.1em;
+    }
+
+    .message {
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .message.success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+
+    .message.info {
+      background: #d1ecf1;
+      border: 1px solid #bee5eb;
+      color: #0c5460;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .search-box {
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px 15px;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+
+    footer {
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      color: #6c757d;
+      border-top: 1px solid #e9ecef;
+      font-size: 0.9em;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+      font-size: 0.95em;
+      line-height: 1.6;
+      color: #555;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 400px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+    }
+
+    .modal-close {
+      float: right;
+      font-size: 2em;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .document-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .doc-actions {
+        margin-left: 0;
+        margin-top: 15px;
+        width: 100%;
+      }
+
+      .doc-actions button {
+        flex: 1;
+        min-width: 80px;
+      }
+
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .stat-card {
+        min-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📥 Downloaded Documents</h1>
+      <p>View and manage scraped website documents</p>
+    </header>
+
+    <div class="stats-container" id="statsContainer">
+      <div class="stat-card">
+        <div class="stat-number">-</div>
+        <div class="stat-label">Total Documents</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">-</div>
+        <div class="stat-label">Total Size</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">-</div>
+        <div class="stat-label">Last Updated</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="refreshDocuments()">🔄 Refresh</button>
+      <button class="btn-success" onclick="viewMetadata()">📊 View Metadata</button>
+    </div>
+
+    <div class="content">
+      <div id="messageContainer"></div>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Search documents..." onkeyup="filterDocuments()">
+      </div>
+
+      <h2>Documents</h2>
+      <div id="docContainer" class="loading">Loading documents...</div>
+    </div>
+
+    <footer>
+      <p>Digi Assistant - Document Manager | Last refresh: <span id="lastRefresh">never</span></p>
+    </footer>
+  </div>
+
+  <div class="modal" id="viewModal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <div class="modal-header" id="modalTitle">Document Content</div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:7000/api';
+    let allDocuments = [];
+
+    async function loadDocuments() {
+      try {
+        showMessage('', 'info');
+        document.getElementById('docContainer').innerHTML = '<div class="loading">Loading documents...</div>';
+        
+        const [docsRes, statsRes] = await Promise.all([
+          fetch(`${API_BASE}/downloads`),
+          fetch(`${API_BASE}/downloads/stats`)
+        ]);
+
+        const docsData = await docsRes.json();
+        const statsData = await statsRes.json();
+
+        if (docsData.success) {
+          allDocuments = docsData.data.documents || [];
+          renderDocuments(allDocuments);
+          updateStats(statsData.data);
+          document.getElementById('lastRefresh').textContent = new Date().toLocaleTimeString('id-ID');
+        } else {
+          showMessage('Failed to load documents', 'error');
+          document.getElementById('docContainer').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Failed to load documents</p></div>';
+        }
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+        console.error('Error loading documents:', error);
+        document.getElementById('docContainer').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><p>Error connecting to server</p><p style="font-size: 0.9em; margin-top: 10px;">Make sure server is running on localhost:7000</p></div>';
+      }
+    }
+
+    function renderDocuments(documents) {
+      const container = document.getElementById('docContainer');
+
+      if (!documents || documents.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📄</div>
+            <h3>No documents yet</h3>
+            <p>Run scraping to download documents</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Command: <code>npm run scrape-website:force</code></p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="documents-grid">
+          ${documents.map(doc => `
+            <div class="document-card">
+              <div class="doc-info">
+                <div class="doc-title">📄 ${doc.pageLabel}</div>
+                <div class="doc-meta">
+                  <div class="meta-item">💾 ${formatBytes(doc.fileSize)}</div>
+                  <div class="meta-item">📝 ${doc.contentLength} chars</div>
+                  <div class="meta-item">🕐 ${new Date(doc.scrapedAt).toLocaleString('id-ID')}</div>
+                  <span class="badge">${doc.format.toUpperCase()}</span>
+                </div>
+                <div class="doc-url">🔗 ${doc.url}</div>
+              </div>
+              <div class="doc-actions">
+                <button class="btn-info" onclick="viewDocument('${doc.id}')">👁️ View</button>
+                <button class="btn-success" onclick="downloadDocument('${doc.id}', '${doc.filename}')">⬇️ Download</button>
+                <button class="btn-danger" onclick="deleteDocument('${doc.id}')">🗑️ Delete</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function updateStats(stats) {
+      const container = document.getElementById('statsContainer');
+      const lastUpdated = stats.lastUpdated 
+        ? new Date(stats.lastUpdated).toLocaleString('id-ID') 
+        : 'Never';
+      
+      container.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-number">${stats.totalDocuments}</div>
+          <div class="stat-label">Total Documents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${formatBytes(stats.totalFileSize)}</div>
+          <div class="stat-label">Total Size</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${lastUpdated}</div>
+          <div class="stat-label">Last Updated</div>
+        </div>
+      `;
+    }
+
+    async function viewDocument(documentId) {
+      try {
+        const res = await fetch(`${API_BASE}/downloads/${documentId}`);
+        const data = await res.json();
+
+        if (data.success) {
+          const doc = data.data;
+          document.getElementById('modalTitle').textContent = `📄 ${doc.pageLabel}`;
+          document.getElementById('modalBody').textContent = doc.content || 'No content available';
+          document.getElementById('viewModal').classList.add('active');
+        }
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('viewModal').classList.remove('active');
+    }
+
+    function downloadDocument(documentId, filename) {
+      window.location.href = `${API_BASE}/downloads/${documentId}/download`;
+      showMessage(`Downloading ${filename}...`, 'success');
+    }
+
+    async function deleteDocument(documentId) {
+      if (!confirm('Are you sure you want to delete this document?')) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/downloads/${documentId}`, { method: 'DELETE' });
+        const data = await res.json();
+
+        if (data.success) {
+          showMessage('Document deleted successfully', 'success');
+          await loadDocuments();
+        }
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    function refreshDocuments() {
+      loadDocuments();
+    }
+
+    async function viewMetadata() {
+      try {
+        const res = await fetch(`${API_BASE}/downloads`);
+        const data = await res.json();
+
+        if (data.success) {
+          const metadata = data.data;
+          document.getElementById('modalTitle').textContent = '📊 Metadata';
+          document.getElementById('modalBody').textContent = JSON.stringify(metadata, null, 2);
+          document.getElementById('viewModal').classList.add('active');
+        }
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    function filterDocuments() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allDocuments.filter(doc => 
+        doc.pageLabel.toLowerCase().includes(searchTerm) ||
+        doc.url.toLowerCase().includes(searchTerm) ||
+        doc.filename.toLowerCase().includes(searchTerm)
+      );
+      renderDocuments(filtered);
+    }
+
+    function showMessage(message, type) {
+      const container = document.getElementById('messageContainer');
+      if (!message) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = `<div class="message ${type}">${message}</div>`;
+      if (type === 'success') {
+        setTimeout(() => { container.innerHTML = ''; }, 3000);
+      }
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    // Load documents on page load
+    window.onload = loadDocuments;
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
