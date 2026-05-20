@@ -6,9 +6,9 @@
       "pageLabel": "Homepage",
       "url": "https://migrasi.id/",
       "format": "md",
-      "fileSize": 872,
-      "contentLength": 787,
-      "scrapedAt": "2026-05-19T04:15:01.569Z",
+      "fileSize": 1020,
+      "contentLength": 935,
+      "scrapedAt": "2026-05-20T02:03:07.295Z",
       "status": "completed"
     },
     {
@@ -17,9 +17,9 @@
       "pageLabel": "About",
       "url": "https://migrasi.id/about",
       "format": "md",
-      "fileSize": 1795,
-      "contentLength": 1708,
-      "scrapedAt": "2026-05-19T04:14:45.524Z",
+      "fileSize": 1371,
+      "contentLength": 1284,
+      "scrapedAt": "2026-05-20T02:02:42.623Z",
       "status": "completed"
     },
     {
@@ -28,9 +28,9 @@
       "pageLabel": "Services",
       "url": "https://migrasi.id/services",
       "format": "md",
-      "fileSize": 2231,
-      "contentLength": 2138,
-      "scrapedAt": "2026-05-19T04:14:55.765Z",
+      "fileSize": 2243,
+      "contentLength": 2150,
+      "scrapedAt": "2026-05-20T02:02:58.378Z",
       "status": "completed"
     },
     {
@@ -39,9 +39,9 @@
       "pageLabel": "Projects",
       "url": "https://migrasi.id/projects",
       "format": "md",
-      "fileSize": 370,
-      "contentLength": 277,
-      "scrapedAt": "2026-05-19T04:14:53.577Z",
+      "fileSize": 374,
+      "contentLength": 281,
+      "scrapedAt": "2026-05-20T02:02:50.347Z",
       "status": "completed"
     },
     {
@@ -50,9 +50,9 @@
       "pageLabel": "Products",
       "url": "https://migrasi.id/product",
       "format": "md",
-      "fileSize": 564,
-      "contentLength": 472,
-      "scrapedAt": "2026-05-19T04:14:50.596Z",
+      "fileSize": 567,
+      "contentLength": 475,
+      "scrapedAt": "2026-05-20T02:02:48.775Z",
       "status": "completed"
     },
     {
@@ -61,9 +61,9 @@
       "pageLabel": "News",
       "url": "https://migrasi.id/news",
       "format": "md",
-      "fileSize": 542,
-      "contentLength": 457,
-      "scrapedAt": "2026-05-19T04:14:47.591Z",
+      "fileSize": 549,
+      "contentLength": 464,
+      "scrapedAt": "2026-05-20T02:02:45.199Z",
       "status": "completed"
     },
     {
@@ -72,9 +72,9 @@
       "pageLabel": "Partners",
       "url": "https://migrasi.id/partner",
       "format": "md",
-      "fileSize": 632,
-      "contentLength": 540,
-      "scrapedAt": "2026-05-19T04:14:49.388Z",
+      "fileSize": 634,
+      "contentLength": 542,
+      "scrapedAt": "2026-05-20T02:02:46.445Z",
       "status": "completed"
     },
     {
@@ -83,9 +83,9 @@
       "pageLabel": "Contact",
       "url": "https://migrasi.id/contact",
       "format": "md",
-      "fileSize": 618,
-      "contentLength": 527,
-      "scrapedAt": "2026-05-19T04:15:04.018Z",
+      "fileSize": 762,
+      "contentLength": 671,
+      "scrapedAt": "2026-05-20T02:03:08.700Z",
       "status": "completed"
     },
     {
@@ -94,9 +94,9 @@
       "pageLabel": "Careers",
       "url": "https://migrasi.id/karir",
       "format": "md",
-      "fileSize": 607,
-      "contentLength": 518,
-      "scrapedAt": "2026-05-19T04:15:00.379Z",
+      "fileSize": 612,
+      "contentLength": 523,
+      "scrapedAt": "2026-05-20T02:03:04.709Z",
       "status": "completed"
     },
     {
@@ -105,9 +105,9 @@
       "pageLabel": "Teams",
       "url": "https://migrasi.id/team",
       "format": "md",
-      "fileSize": 386,
-      "contentLength": 300,
-      "scrapedAt": "2026-05-19T04:14:59.166Z",
+      "fileSize": 388,
+      "contentLength": 302,
+      "scrapedAt": "2026-05-20T02:03:02.386Z",
       "status": "completed"
     },
     {
@@ -116,12 +116,12 @@
       "pageLabel": "Service Types",
       "url": "https://migrasi.id/service-types",
       "format": "md",
-      "fileSize": 376,
-      "contentLength": 273,
-      "scrapedAt": "2026-05-19T04:14:57.095Z",
+      "fileSize": 380,
+      "contentLength": 277,
+      "scrapedAt": "2026-05-20T02:03:01.110Z",
       "status": "completed"
     }
   ],
-  "lastUpdated": "2026-05-19T04:15:04.018Z",
+  "lastUpdated": "2026-05-20T02:03:08.700Z",
   "totalDocuments": 11
 }

@@ -140,4 +140,26 @@ router.post('/sync-webhook', async (req, res) => {
   }
 });
 
+// Trigger full CMS API synchronization manually (equal to npm run sync-api:force)
+router.post('/sync', async (req, res) => {
+  try {
+    console.log('⚡ Manual sync triggered from front-end. Starting sync...');
+    const apiSyncService = require('../services/apiSyncService');
+    const result = await apiSyncService.syncAll(true); // force = true (equal to sync-api:force)
+    
+    res.json({
+      success: true,
+      message: 'Synchronization completed successfully!',
+      result
+    });
+  } catch (error) {
+    console.error('❌ Error handling manual sync:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to complete synchronization',
+      details: error.message 
+    });
+  }
+});
+
 module.exports = router;

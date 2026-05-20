@@ -9,6 +9,17 @@ const openaiService = require('./openaiService');
 const pineconeService = require('./pineconeService');
 const documentDownloadService = require('./documentDownloadService');
 
+function decodeHtmlEntities(str) {
+  if (!str) return '';
+  return str
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 class WebScraperService {
   constructor() {
     this.hashFilePath = path.join(__dirname, '../../knowledge/scrape-hashes.json');
@@ -138,9 +149,9 @@ class WebScraperService {
 
     // ── Phase 8: Clean up whitespace ─────────────────────────
     mainContent = mainContent
-      .replace(/\s+/g, ' ')           // Normalize whitespace
-      .replace(/\n\s*\n/g, '\n')      // Remove empty lines
-      .replace(/\t/g, ' ')            // Replace tabs
+      .replace(/[ \t]+/g, ' ')        // Collapse horizontal spaces
+      .replace(/\r\n/g, '\n')         // Normalize newlines
+      .replace(/\n[ \t]*\n+/g, '\n\n') // Collapse multiple empty lines
       .trim();
 
     // ── Phase 9: Hapus pola navigasi yang mungkin tersisa ────
@@ -188,9 +199,11 @@ class WebScraperService {
 
     // ── Phase 12: Final cleanup ──────────────────────────────
     mainContent = mainContent
-      .replace(/\s{2,}/g, ' ')        // Collapse multiple spaces
+      .replace(/[ \t]{2,}/g, ' ')     // Collapse multiple horizontal spaces
       .replace(/^\s+|\s+$/gm, '')     // Trim lines
       .trim();
+
+    mainContent = decodeHtmlEntities(mainContent);
 
     // ── Phase 13: Tambahkan label halaman sebagai context ────
     if (mainContent.length > 0) {
