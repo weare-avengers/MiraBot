@@ -21,6 +21,17 @@ function stripHtml(html) {
     .trim();
 }
 
+function decodeHtmlEntities(str) {
+  if (!str) return '';
+  return str
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 class ApiSyncService {
   constructor() {
     this.hashFilePath = path.join(__dirname, '../../knowledge/api-hashes.json');
@@ -407,8 +418,12 @@ class ApiSyncService {
             let val = item.value;
             if (item.type === 'JSON') {
               try {
-                const parsed = JSON.parse(item.value);
-                val = parsed.id || parsed.en || item.value;
+                const parsed = typeof item.value === 'string' ? JSON.parse(item.value) : item.value;
+                if (parsed && typeof parsed === 'object') {
+                  val = parsed.id || parsed.en || JSON.stringify(parsed, null, 2);
+                } else {
+                  val = parsed;
+                }
               } catch(e) {}
             }
             
@@ -463,11 +478,14 @@ class ApiSyncService {
           rawContent = rawContent.replace(/<[^>]*>/g, ' '); // Strip HTML tags
         }
 
-        // Clean up whitespace
+        // Clean up whitespace while preserving newlines
         let cleanedText = rawContent
-          .replace(/\s+/g, ' ')
-          .replace(/\n\s*\n/g, '\n')
+          .replace(/[ \t]+/g, ' ')          // Collapse horizontal spaces
+          .replace(/\r\n/g, '\n')           // Normalize newlines
+          .replace(/\n[ \t]*\n+/g, '\n\n')  // Collapse multiple empty lines
           .trim();
+
+        cleanedText = decodeHtmlEntities(cleanedText);
 
         if (!cleanedText) {
           console.log(`\n[${i + 1}/${items.length}] ⚠️  Skipping "${pageLabel}": No content text`);

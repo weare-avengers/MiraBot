@@ -1,10 +1,56 @@
 # Services
 
 **Sumber:** https://migrasi.id/services
-**Di-scrape:** 19/5/2026, 11.14.55
+**Di-scrape:** 20/5/2026, 09.02.58
 
 ---
 
 [Halaman: Services - migrasi.id]
 
-# Our AV & IT Services Catalog We deliver comprehensive, end-to-end consulting and implementation services. ## IT Training - **Service Category:** Information Technology - **Description:** Applied IT training to enhance the competence and productivity of your team. ## Website Development - **Service Category:** Information Technology - **Description:** Professional, responsive, and secure website to strengthen your brand and increase business conversions. ## Pro-Audio Visual System Integration - **Service Category:** Audio Visual - **Description:** Integrated professional audio visual solution for meetings, auditoriums, and events. ## Application Development - **Service Category:** Information Technology - **Description:** Custom web & mobile applications for process automation and operational efficiency of your company. ## IT Maintenance and Service Support - **Service Category:** Information Technology - **Description:** Proactive IT support to keep the system stable, secure, and with minimal downtime. ## Integrated Communication & Collaboration - **Service Category:** Audio Visual - **Description:** An integrated collaboration system for effective and modern hybrid communication. ## Cloud Computing - **Service Category:** Information Technology - **Description:** Flexible, secure, and cost-effective cloud migration and management. ## Big Data & AI - **Service Category:** Information Technology - **Description:** Analytical and AI solutions for accurate business insights and real-time data-driven decisions. ## Network Installation - **Service Category:** Information Technology - **Description:** Fast, secure, and scalable network installation as the foundation for digital transformation. ## Cyber Security - **Service Category:** Information Technology - **Description:** Comprehensive protection from cyber threats through system assessment and hardening. ## Procurement of Hardware and Software - **Service Category:** Information Technology - **Description:** Procurement of equipment and official software according to needs, efficient, and in the right specifications.
+# Our AV & IT Services Catalog
+
+We deliver comprehensive, end-to-end consulting and implementation services.
+
+## IT Training
+- **Service Category:** Information Technology
+- **Description:** Applied IT training to enhance the competence and productivity of your team.
+
+## Website Development
+- **Service Category:** Information Technology
+- **Description:** Professional, responsive, and secure website to strengthen your brand and increase business conversions.
+
+## Pro-Audio Visual System Integration
+- **Service Category:** Audio Visual
+- **Description:** Integrated professional audio visual solution for meetings, auditoriums, and events.
+
+## Application Development
+- **Service Category:** Information Technology
+- **Description:** Custom web & mobile applications for process automation and operational efficiency of your company.
+
+## IT Maintenance and Service Support
+- **Service Category:** Information Technology
+- **Description:** Proactive IT support to keep the system stable, secure, and with minimal downtime.
+
+## Integrated Communication & Collaboration
+- **Service Category:** Audio Visual
+- **Description:** An integrated collaboration system for effective and modern hybrid communication.
+
+## Cloud Computing
+- **Service Category:** Information Technology
+- **Description:** Flexible, secure, and cost-effective cloud migration and management.
+
+## Big Data & AI
+- **Service Category:** Information Technology
+- **Description:** Analytical and AI solutions for accurate business insights and real-time data-driven decisions.
+
+## Network Installation
+- **Service Category:** Information Technology
+- **Description:** Fast, secure, and scalable network installation as the foundation for digital transformation.
+
+## Cyber Security
+- **Service Category:** Information Technology
+- **Description:** Comprehensive protection from cyber threats through system assessment and hardening.
+
+## Procurement of Hardware and Software
+- **Service Category:** Information Technology
+- **Description:** Procurement of equipment and official software according to needs, efficient, and in the right specifications.

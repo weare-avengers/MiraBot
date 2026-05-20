@@ -352,10 +352,13 @@
                 <button class="btn btn-primary" onclick="startChat()">
                     💬 Start Chatting
                 </button>
-                <button class="btn btn-secondary" onclick="viewDocumentation()">
-                    📖 Documentation
+                <button class="btn btn-secondary" id="sync-btn" onclick="syncCmsData()">
+                    Sync Data Knowledge
                 </button>
             </div>
+            
+            <!-- Sync Status Message Box -->
+            <div id="sync-status" style="display: none; margin-top: 25px; padding: 16px; border-radius: 12px; font-size: 14px; text-align: center; font-weight: 500; transition: all 0.3s ease; line-height: 1.5;"></div>
         </div>
 
         <!-- Footer -->
@@ -372,9 +375,57 @@
             window.location.href = '/examples/chat-client.html';
         }
 
-        function viewDocumentation() {
-            // Redirect ke dokumentasi atau README
-            window.location.href = '/README.md';
+        async function syncCmsData() {
+            const btn = document.getElementById('sync-btn');
+            const statusDiv = document.getElementById('sync-status');
+            
+            if (!btn || !statusDiv) return;
+            
+            // Set loading state
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Syncing CMS Data...';
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'not-allowed';
+            
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = '#f0f4ff';
+            statusDiv.style.color = '#667eea';
+            statusDiv.style.border = '1px solid #c3dafe';
+            statusDiv.innerHTML = '🔄 Connecting to NestJS CMS and updating vector database... Please wait, this process will take a few seconds.';
+
+            try {
+                const response = await fetch('/api/knowledge/sync', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.style.background = '#e6fffa';
+                    statusDiv.style.color = '#319795';
+                    statusDiv.style.border = '1px solid #b2f5ea';
+                    
+                    const count = data.result?.updated || 0;
+                    statusDiv.innerHTML = `🎉 <strong>Success!</strong> Successfully synchronized ${count} CMS page(s) with Pinecone vector database. Knowledge base updated successfully!`;
+                } else {
+                    throw new Error(data.error || 'Failed to complete synchronization.');
+                }
+            } catch (error) {
+                console.error('❌ Sync Error:', error);
+                statusDiv.style.background = '#fff5f5';
+                statusDiv.style.color = '#e53e3e';
+                statusDiv.style.border = '1px solid #fed7d7';
+                statusDiv.innerHTML = `❌ <strong>Error:</strong> ${error.message || 'Connection failed.'}`;
+            } finally {
+                // Reset button state
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Sync CMS Data';
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
         }
 
         // Optional: Log welcome event

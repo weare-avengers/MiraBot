@@ -88,7 +88,7 @@ app.use((err, req, res, next) => {
 // Initialize services and start server
 async function startServer() {
   try {
-    console.log('🚀 Starting Digi AI Assistant...');
+    console.log('🚀 Starting Digi AI Assistant (Hot Reloaded)...');
     
     // Initialize Pinecone
     await pineconeService.initialize();
